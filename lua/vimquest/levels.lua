@@ -586,9 +586,9 @@ M.chapters = {
     rune = { row = 1, col = 28, letter = 'V', whisper = 'Ink seeps from the wall: "The spell begins with a colon... at the end of the first line."', lore = '"Colon. Q. The two keys he fears most."' },
     intro = {
       wizard('tower', 'The Mouse King wrote a cursed spell that worships the mouse. We shall rewrite it to honor vim!'),
-      wizard('tower', '`ciw` means Change Inner Word: it deletes the word under the cursor so you can type a new one. Type c, then i, then w!', 'ciw'),
-      wizard('tower', '`*` (Shift + 8) searches for the word under your cursor. Press it!', '*'),
-      wizard('tower', '`n` jumps to the NEXT match of your search. Press it!', 'n'),
+      wizard('tower', 'First, mark your target. `*` (Shift + 8) searches for the word under your cursor. Press it!', '*'),
+      wizard('tower', 'Now `ciw` - Change Inner Word: it deletes the word under the cursor so you can type a new one. Type c, then i, then w!', 'ciw'),
+      wizard('tower', '`n` jumps to the NEXT match of your search - that is why we pressed * first. Press it!', 'n'),
       wizard('tower', '`.` (the period key) REPEATS your last change. The most powerful key in Vim! Press it!', '.'),
       wizard('tower', 'The knight\'s dance: on "mouse" press *, then ciw, type vim, Esc. Then n . n . and the spell is broken!'),
     },
