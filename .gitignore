@@ -1,0 +1,10 @@
+tags
+test.sh
+.luarc.json
+nvim
+spell/
+.DS_Store
+
+# Sounds are synthesized on install by lua/vimquest/sfx/generate.py
+lua/vimquest/sfx/*.wav
+__pycache__/
