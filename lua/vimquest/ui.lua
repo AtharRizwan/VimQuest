@@ -468,7 +468,7 @@ function M.menu(chapters, save, on_pick)
       end
       local probe
       for _, dir in ipairs(r >= last and { 1, -1 } or { -1, 1 }) do
-        probe = r
+        probe = math.min(math.max(r, art_rows + 1), art_rows + #rows)
         while probe > art_rows and probe <= art_rows + #rows and not target[probe - art_rows] do
           probe = probe + dir
         end

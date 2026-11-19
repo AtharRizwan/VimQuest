@@ -607,7 +607,7 @@ M.chapters = {
     setup = function(ctx) ctx.match('VQCurse', '\\<mouse\\>') end,
     objectives = {
       {
-        text = 'Change one "mouse" into "vim" with `ciw`',
+        text = 'Press `*` on a "mouse", then `ciw` it into "vim"',
         tip = 'Press `w` to move onto "mouse". Press `*`, then `ciw`, type vim, and press `Esc`.',
         start = function(ctx) ctx.set_cursor(2, 0) end,
         check = function(ctx)
@@ -617,7 +617,11 @@ M.chapters = {
       },
       {
         text = 'Banish the other two with `n` and `.`',
-        tip = 'Press `n` to jump to the next mouse, then `.` to repeat your change. Again: `n` `.`',
+        tip = 'Press `n` to jump to the next mouse, then `.` to repeat your change. Again: `n` `.` (No `*` yet? Type `/mouse` and `Enter` first.)',
+        -- n only repeats a search, so warn if the player skipped * before ciw
+        start = function(ctx)
+          if not vim.fn.getreg('/'):find 'mouse' then ctx.say('No search yet, so n has nothing to find! Type /mouse and Enter, then . to repeat your change.', 'VQBad') end
+        end,
         check = function(ctx) return ctx.mode() == 'n' and eq({ ctx.line(2), ctx.line(3) }, { spell[2], spell[3] }) end,
       },
       {
