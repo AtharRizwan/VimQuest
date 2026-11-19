@@ -37,6 +37,14 @@ return function(H)
       local evil = not S.calm and S.t % 4000 < 200
       api.nvim_buf_set_extmark(S.buf, twin_ns, r - 1, tc, { end_col = tc + 1, hl_group = evil and 'VQGuard' or 'VQTwin', priority = 380 })
     end
+    -- Tell players once that the purple shape is an easter egg, not a rune to collect
+    if not S.twin_told and S.keys > 0 then
+      S.twin_told = true
+      ctx.say('That purple shape is just your reflection. No need to catch it, knight!', 'VQRuneText')
+    elseif not S.twin_touched and tc >= 0 and math.abs(tc - c) <= 1 then
+      S.twin_touched = true
+      ctx.say('You touch the glass... it is only your reflection. It mirrors you; it cannot be caught.', 'VQRuneText')
+    end
   end
 
   local mirrors = {
