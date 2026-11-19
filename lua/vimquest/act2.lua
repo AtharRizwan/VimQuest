@@ -465,10 +465,18 @@ return function(H)
       },
       {
         text = 'Select the 2 SECRET lines with `v`, write them to secret.txt',
-        tip = 'Go to the first SECRET line, press `v`, then `j`. Press `:` - Vim adds \'<,\'> for you - type w secret.txt and `Enter`.',
-        check = function()
+        tip = 'Go to the first SECRET line, press `v`, then `j`. Press `:` - Vim adds \'<,\'> for you - type w secret.txt and `Enter`. Got it wrong? Redo it with `w!` to overwrite.',
+        check = function(ctx)
           local ok, lines = pcall(vim.fn.readfile, apath 'secret.txt')
-          return ok and eq(lines, secrets)
+          if not ok then return false end
+          if eq(lines, secrets) then return true end
+          -- Explain a wrong selection once per attempt (an extra blank line is the usual culprit)
+          local S, seen = ctx.state(), table.concat(lines, '\n')
+          if S.secret_seen ~= seen then
+            S.secret_seen = seen
+            ctx.say(('secret.txt has %d line%s, but it needs exactly the 2 SECRET lines. Select with v and ONE j, then :w! secret.txt (the ! overwrites).'):format(#lines, #lines == 1 and '' or 's'), 'VQBad')
+          end
+          return false
         end,
       },
       {
