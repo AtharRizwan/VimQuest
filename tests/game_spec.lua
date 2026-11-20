@@ -234,8 +234,16 @@ local co = coroutine.create(function()
   check(api.nvim_get_current_line():find('1%. The Cave') ~= nil, 'gg lands on chapter 1')
   close()
   check(pcall(vim.cmd, 'VimQuest credits'), 'credits roll')
-  wait(1200)
+  wait(3000)
+  check(sfx.log[#sfx.log] == 'music:theme', 'the credits play the theme')
+  vim.cmd 'silent! close'
+  wait(300)
   close()
+  -- If the credits music were still marked as playing, asking for the theme again would be ignored
+  local n = #sfx.log
+  sfx.music 'theme'
+  check(#sfx.log == n + 1, 'closing the credits with :q stops their music')
+  sfx.stop_music()
 
   section 'Audio without a sound card'
   -- tests/run.sh puts fake afplay/paplay/aplay players on PATH that fail instantly and log each start
@@ -243,6 +251,7 @@ local co = coroutine.create(function()
   local logfile = os.getenv 'VQ_PLAYER_LOG'
   if logfile then
     os.remove(logfile)
+    sfx.stop_music()
     sfx.music 'theme'
     wait(2500)
     sfx.stop_music()

@@ -622,6 +622,17 @@ function M.credits(on_done)
   vim.defer_fn(function()
     if not done then sfx.music 'theme' end
   end, 2500)
+  -- Closed some other way (like :q)? Still stop the music and bring the cursor back
+  api.nvim_create_autocmd('BufWipeout', {
+    buffer = buf,
+    once = true,
+    callback = function()
+      if done then return end
+      done = true
+      show_cursor()
+      sfx.stop_music()
+    end,
+  })
 
   vim.bo[buf].modifiable = true
   api.nvim_buf_set_lines(buf, 0, -1, false, vim.split(string.rep('\n', H / 2 + TR - 1), '\n'))
