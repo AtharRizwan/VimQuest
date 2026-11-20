@@ -62,7 +62,11 @@ function M.music(name)
   local mine = gen
   local function loop()
     if gen ~= mine then return end
-    local ok, p = pcall(vim.system, vim.list_extend(vim.deepcopy(player), { path }), {}, function() vim.schedule(loop) end)
+    local started = vim.uv.now()
+    -- Only loop after a clean, full play; a player that fails at once (no sound card) would spin forever
+    local ok, p = pcall(vim.system, vim.list_extend(vim.deepcopy(player), { path }), {}, function(r)
+      if r.code == 0 and vim.uv.now() - started > 1000 then vim.schedule(loop) end
+    end)
     proc = ok and p or nil
   end
   loop()
