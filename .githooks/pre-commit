@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Fast syntax check of staged Lua, shell and Python files (the full game tests run on GitHub)
+set -uo pipefail
+
+files=$(git diff --cached --name-only --diff-filter=ACM)
+[ -z "$files" ] && exit 0
+bad=0
+
+lua=$(echo "$files" | grep '\.lua$' || true)
+if [ -n "$lua" ]; then
+  # shellcheck disable=SC2086
+  out=$(nvim --headless --clean -l "$(git rev-parse --show-toplevel)/.githooks/check_lua.lua" $lua 2>&1)
+  [ -n "$out" ] && { echo "$out"; bad=1; }
+fi
+
+for f in $(echo "$files" | grep -E '\.sh$|^\.githooks/pre-commit$' || true); do
+  bash -n "$f" || bad=1
+done
+
+for f in $(echo "$files" | grep '\.py$' || true); do
+  python3 -c "import ast, sys; ast.parse(open(sys.argv[1]).read(), sys.argv[1])" "$f" || bad=1
+done
+
+if [ "$bad" -ne 0 ]; then
+  echo "pre-commit: syntax errors above, commit stopped (git commit --no-verify to skip)"
+  exit 1
+fi

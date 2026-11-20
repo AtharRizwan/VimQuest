@@ -1,4 +1,4 @@
-.PHONY: test sounds
+.PHONY: test sounds hooks
 
 # Plays every chapter in an isolated Neovim and checks known regressions
 test:
@@ -7,3 +7,7 @@ test:
 # Rebuilds the music and sound effects
 sounds:
 	python3 lua/vimquest/sfx/generate.py
+
+# Turns on the fast pre-commit syntax check for this clone
+hooks:
+	git config core.hooksPath .githooks

@@ -89,6 +89,9 @@ The suite plays all 14 story chapters with real keystrokes, opens every story pa
 regressions. It runs in an isolated Neovim with its own temporary save folder, so your own progress is never
 touched. The same tests run automatically on every push and pull request.
 
+Optionally, run `make hooks` once to turn on a pre-commit hook that checks your Lua, shell and Python files for
+syntax errors in about a second, so a typo never reaches a commit.
+
 ## Credits
 
 | Role | |
