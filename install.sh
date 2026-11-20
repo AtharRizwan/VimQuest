@@ -155,12 +155,16 @@ ok "Neovim is ready"
 
 cat <<EOF
 
-${green}${bold}All set!${off}
+${green}${bold}All set!${off} Here is how to start playing:
 
   1. Set your terminal font to ${bold}JetBrainsMono Nerd Font${off} so icons show up
      ${dim}(macOS Terminal: Settings > Profiles > Text > Font > Change)${off}
-  2. Open a new terminal and run ${bold}nvim${off}
-  3. Type ${bold}:VimQuest${off} and press Enter to start the game
+  2. Open a ${bold}new${off} terminal window, type ${bold}nvim${off} and press Enter
+  3. On the start screen, press ${bold}v${off} to Play VimQuest
+     ${dim}(or type ${off}${bold}:VimQuest${off}${dim} and press Enter - the : is Shift + ;)${off}
+  4. Pick a chapter with j / k and press Enter. The game teaches you the rest!
+
+  To quit Neovim later: type ${bold}:qa${off} and press Enter.
 
   Your previous config (if any) was saved next to $CONFIG as nvim.backup-*
 

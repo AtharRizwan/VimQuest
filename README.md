@@ -23,9 +23,22 @@ The installer:
 - installs every plugin, language server and syntax parser
 - composes the game's soundtrack and sound effects locally (no audio is downloaded)
 
-Afterwards, set your terminal's font to **JetBrainsMono Nerd Font**, then run `nvim` and type `:VimQuest`.
-
 Running the installer again updates an existing VimQuest install.
+
+## Start playing
+
+Never opened Neovim before? Here's exactly what to do after installing:
+
+1. **Set your terminal font** to **JetBrainsMono Nerd Font** so the icons show up.
+   On the macOS Terminal: *Settings → Profiles → Text → Font → Change*.
+2. **Open a new terminal window**, type `nvim` and press **Enter**. Neovim opens on its start screen.
+3. **Press `v`** (*Play VimQuest* on the start screen).
+   Or, from anywhere in Neovim, type `:VimQuest` and press **Enter**.
+   The `:` is **Shift + ;**, and it appears at the bottom of the screen as you type.
+4. Pick a chapter with `j` / `k` and press **Enter**. The game explains every key from there.
+
+To leave a chapter, type `:q` and press **Enter**. To quit Neovim completely, type `:qa` and press **Enter**.
+(Yes, learning how to exit Vim is part of the game.)
 
 ## The game
 
