@@ -1,7 +1,8 @@
 -- Plays VimQuest's retro sound effects in the background (afplay on macOS)
 local M = { enabled = true, music_on = true }
 
-local dir = vim.fs.joinpath(vim.fn.stdpath 'config', 'lua', 'vimquest', 'sfx')
+-- Sounds live next to this file, so the game works from any install location
+local dir = vim.fs.joinpath(vim.fs.dirname(debug.getinfo(1, 'S').source:sub(2)), 'sfx')
 local players = { { 'afplay' }, { 'paplay' }, { 'aplay', '-q' } }
 local player
 for _, p in ipairs(players) do

@@ -64,6 +64,18 @@ Built on [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim), with:
 
 Press `Space` and wait to see every shortcut.
 
+## Contributing
+
+Pull requests are welcome: new chapters, new bosses, fixes. Run the tests before opening one:
+
+```sh
+make test
+```
+
+The suite plays all 14 story chapters with real keystrokes, opens every story page, and checks known
+regressions. It runs in an isolated Neovim with its own temporary save folder, so your own progress is never
+touched. The same tests run automatically on every push and pull request.
+
 ## Credits
 
 | Role | |
