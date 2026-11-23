@@ -38,11 +38,18 @@ docker run -it --rm -v vimquest-save:/home/vimquest/save vimquest
 The first command takes a few minutes, once. After that the second one starts in seconds, and `vimquest-save`
 keeps your progress between runs. Your terminal still needs a Nerd Font for the icons (see step 1 below).
 
-- **Sound (Linux):** add
-  `-e PULSE_SERVER=unix:/tmp/pulse.sock --mount type=bind,src="$XDG_RUNTIME_DIR/pulse/native",dst=/tmp/pulse.sock`
-  before `vimquest`. On macOS the game plays without sound in Docker.
-- **Remove it all:** `docker rmi vimquest && docker volume rm vimquest-save`, then `docker builder prune` to clear
-  Docker's build cache
+**Sound (Linux):** run it like this instead, so the game can reach your speakers. On macOS the game plays without
+sound in Docker.
+
+```sh
+docker run -it --rm -v vimquest-save:/home/vimquest/save \
+  -e PULSE_SERVER=unix:/tmp/pulse.sock \
+  --mount type=bind,src="$XDG_RUNTIME_DIR/pulse/native",dst=/tmp/pulse.sock \
+  vimquest
+```
+
+**Remove it all:** `docker rmi vimquest && docker volume rm vimquest-save`, then `docker builder prune` to clear
+Docker's build cache.
 
 ## Start playing
 
