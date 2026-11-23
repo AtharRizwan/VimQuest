@@ -33,12 +33,14 @@ ENV LANG=C.UTF-8 TERM=xterm-256color
 
 COPY --chown=vimquest:vimquest . .config/nvim
 
-# Same steps as install.sh: compose the sounds, then install plugins, language servers and parsers,
-# so the container starts without downloading anything. The check stops the build if any install failed.
+# Same steps as install.sh: compose the sounds, then install plugins, language servers and parsers.
+# Everything is in the image, so it works offline (Mason still checks for updates once a day, like a normal install).
+# The check stops the build if any install failed. ~/.cache/nvim stays: it records when Mason last updated.
 RUN python3 .config/nvim/lua/vimquest/sfx/generate.py \
  && nvim --headless --cmd 'lua vim.fn.confirm = function() return 1 end' -c 'luafile .config/nvim/scripts/bootstrap.lua' \
  && nvim --headless -c 'luafile .config/nvim/scripts/docker_check.lua' \
- && rm -rf .npm .cache
+ && rm -rf .npm \
+ && find .cache -mindepth 1 -maxdepth 1 ! -name nvim -exec rm -rf {} +
 
 # Progress lives in ~/save, so a volume mounted there keeps it between runs
 RUN mkdir save && ln -s /home/vimquest/save/vimquest.json .local/share/nvim/vimquest.json
