@@ -9,7 +9,10 @@ on:
       - init.lua
       - nvim-pack-lock.json
       - lua/custom/**
+      - lua/kickstart/**
+      - lua/vimquest/sfx/generate.py
       - scripts/**
+      - tests/run.sh
       - .github/workflows/docker.yml
   pull_request:
     paths:
@@ -18,7 +21,10 @@ on:
       - init.lua
       - nvim-pack-lock.json
       - lua/custom/**
+      - lua/kickstart/**
+      - lua/vimquest/sfx/generate.py
       - scripts/**
+      - tests/run.sh
       - .github/workflows/docker.yml
 
 jobs:
@@ -29,17 +35,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # The build itself fails if a language server or parser did not install (scripts/docker_check.lua)
       - name: Build the image
         run: docker build -t vimquest .
 
       - name: Start offline with everything installed
-        run: |
-          docker run --rm --network none vimquest --headless -c '
-            lua local ok = vim.fn.exists(":VimQuest") == 2 and pcall(require, "vimquest")
-            if not ok or vim.v.errmsg ~= "" then
-              io.stderr:write("Startup failed: " .. vim.v.errmsg .. "\n")
-              vim.cmd.cquit(1)
-            end' -c 'qa!'
+        run: docker run --rm --network none vimquest --headless -c 'luafile .config/nvim/scripts/docker_check.lua'
 
       - name: Run the test suite inside the image
         env:

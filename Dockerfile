@@ -10,7 +10,7 @@ FROM debian:trixie-slim
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
       ca-certificates curl git unzip tar gzip make gcc libc6-dev \
-      ripgrep fd-find lazygit nodejs npm python3 python3-venv pulseaudio-utils \
+      ripgrep fd-find lazygit nodejs npm python3 python3-venv pulseaudio-utils tini \
  && ln -s /usr/bin/fdfind /usr/local/bin/fd \
  && rm -rf /var/lib/apt/lists/*
 
@@ -34,13 +34,15 @@ ENV LANG=C.UTF-8 TERM=xterm-256color
 COPY --chown=vimquest:vimquest . .config/nvim
 
 # Same steps as install.sh: compose the sounds, then install plugins, language servers and parsers,
-# so the container starts without downloading anything
+# so the container starts without downloading anything. The check stops the build if any install failed.
 RUN python3 .config/nvim/lua/vimquest/sfx/generate.py \
  && nvim --headless --cmd 'lua vim.fn.confirm = function() return 1 end' -c 'luafile .config/nvim/scripts/bootstrap.lua' \
+ && nvim --headless -c 'luafile .config/nvim/scripts/docker_check.lua' \
  && rm -rf .npm .cache
 
 # Progress lives in ~/save, so a volume mounted there keeps it between runs
 RUN mkdir save && ln -s /home/vimquest/save/vimquest.json .local/share/nvim/vimquest.json
 
-# scripts/docker.lua gives the container a clipboard
-ENTRYPOINT ["nvim", "--cmd", "luafile /home/vimquest/.config/nvim/scripts/docker.lua"]
+# tini reaps finished background processes and passes on signals, so Neovim is not PID 1.
+# scripts/docker.lua gives the container a clipboard.
+ENTRYPOINT ["/usr/bin/tini", "--", "nvim", "--cmd", "luafile /home/vimquest/.config/nvim/scripts/docker.lua"]
